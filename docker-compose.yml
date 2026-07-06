@@ -4,3 +4,7 @@ services:
     container_name: redis
     command: redis-server --requirepass my-redis-container-pass --loglevel warning
     restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      start_period: 10s
