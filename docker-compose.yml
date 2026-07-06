@@ -1,0 +1,26 @@
+services:
+  redis:
+    image: redis:8.8-alpine
+    container_name: redis
+    command: redis-server --requirepass my-redis-pass --loglevel warning
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      start_period: 10s
+
+  postgres:
+    image: postgres:18-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: my-postgres-pass
+      POSTGRES_DB: identity-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready" ]
+    volumes:
+      - postgres-data:/var/lib/postgresql/docker
+
+volumes:
+  postgres-data:
+    driver: local
