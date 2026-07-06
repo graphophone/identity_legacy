@@ -1,0 +1,6 @@
+services:
+  redis:
+    image: redis:8.8-alpine
+    container_name: redis
+    command: redis-server --requirepass my-redis-container-pass --loglevel warning
+    restart: always
