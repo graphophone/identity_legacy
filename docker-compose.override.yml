@@ -8,17 +8,16 @@ services:
     container_name: redis-insight
     restart: unless-stopped
     environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDISINSIGHT_HOST=0.0.0.0
-      - REDISINSIGHT_ACCEPT_LICENCE=true
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDISINSIGHT_HOST: "0.0.0.0"
+      REDISINSIGHT_ACCEPT_LICENCE: true
     ports:
       - "15540:5540"
     networks:
       - redis-network
     depends_on:
       - redis
-
 
 networks:
   redis-network:
