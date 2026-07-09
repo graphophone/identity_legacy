@@ -7,8 +7,6 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /identity-svc
-
 EXPOSE 8080
 
-CMD ["/identity-svc"]
+CMD ["go", "run", "."]

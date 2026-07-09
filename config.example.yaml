@@ -1,0 +1,12 @@
+redis:
+  host: redis
+  port: 6379
+  password: my-redis-pass
+
+postgres:
+  host: postgres
+  port: 5432
+  user: user
+  password: my-postgres-pass
+  database: identity-db
+  timeout: 30s
