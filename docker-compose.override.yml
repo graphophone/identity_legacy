@@ -40,6 +40,11 @@ services:
         condition: service_healthy
     networks:
       - postgres-network
+  
+  identity-svc:
+    networks:
+      - redis-network
+      - postgres-network
 
 networks:
   redis-network:
