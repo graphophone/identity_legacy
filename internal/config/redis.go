@@ -16,10 +16,10 @@ type RedisConfig struct {
 }
 
 func (c *config) loadRedisConfigFromRaw() {
-	host := c.rawConfig.String(redisHost)
-	port := c.rawConfig.Int(redisPort)
-	password := c.rawConfig.String(redisPassword)
-	database := c.rawConfig.Int(redisDatabase)
+	host := c.rawConfig.MustString(redisHost)
+	port := c.rawConfig.MustInt(redisPort)
+	password := c.rawConfig.MustString(redisPassword)
+	database := c.rawConfig.MustInt(redisDatabase)
 
 	c.redis = &RedisConfig{
 		Address:  fmt.Sprintf("%s:%d", host, port),

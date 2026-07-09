@@ -8,15 +8,13 @@ import (
 
 type Config interface {
 	Redis() *RedisConfig
+	Postgres() *PostgresConfig
 }
 
 type config struct {
 	rawConfig *koanf.Koanf
 	redis     *RedisConfig
-}
-
-func (c *config) Redis() *RedisConfig {
-	return c.redis
+	postgres  *PostgresConfig
 }
 
 func LoadConfig(configPath string) (Config, error) {
@@ -28,6 +26,15 @@ func LoadConfig(configPath string) (Config, error) {
 	}
 
 	cfg.loadRedisConfigFromRaw()
+	cfg.loadPostgresConfigFromRaw()
 
 	return &cfg, err
+}
+
+func (c *config) Redis() *RedisConfig {
+	return c.redis
+}
+
+func (c *config) Postgres() *PostgresConfig {
+	return c.postgres
 }
