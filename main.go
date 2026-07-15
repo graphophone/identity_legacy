@@ -34,18 +34,22 @@ func main() {
 	fmt.Println("Disconnected from Redis")
 
 	fmt.Printf(
-		"Postgres: %s:%s (user: %s, password: %s)\n",
+		"Postgres: %s:%d (user: %s, password: %s)\n",
 		cfg.Postgres().Host,
 		cfg.Postgres().Port,
 		cfg.Postgres().User,
 		cfg.Postgres().Password,
 	)
-	postgresClient, err := postgres.Connect(cfg.Postgres())
+	pgClient, err := postgres.New(cfg.Postgres())
 	if err != nil {
 		log.Fatal("Error while connecting to postgres: ", err)
 	}
 	fmt.Println("Connected to Postgres")
-	if err := postgresClient.Close(); err != nil {
+	if err := pgClient.RegisterModels(); err != nil {
+		log.Fatal("Error while registering models")
+	}
+	fmt.Println("Registered models")
+	if err := pgClient.Close(); err != nil {
 		log.Fatal("Error while closing Postgres connection: ", err)
 	}
 	fmt.Println("Disconnected from Postgres")
