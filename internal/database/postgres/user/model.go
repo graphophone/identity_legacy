@@ -1,6 +1,10 @@
-package user
+package userdb
 
-import "gorm.io/gorm"
+import (
+	"encoding/json"
+
+	"gorm.io/gorm"
+)
 
 type User struct {
 	gorm.Model
@@ -14,4 +18,12 @@ type User struct {
 	City         *string
 	AvatarUrl    *string
 	IsActive     bool `gorm:"default:true"`
+}
+
+func (u *User) String() string {
+	out, err := json.Marshal(u)
+	if err != nil {
+		panic(err)
+	}
+	return string(out)
 }

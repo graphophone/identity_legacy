@@ -1,4 +1,4 @@
-package user
+package userdb
 
 import (
 	"context"
@@ -8,11 +8,11 @@ import (
 )
 
 type UserManager interface {
-	Get(ctx context.Context, id uint) (User, error)
-	Register(ctx context.Context, user *User) (*User, error)
+	Get(ctx context.Context, id uint) (*User, error)
+	Create(ctx context.Context, user *User) (*User, error)
 	Update(ctx context.Context, user *User) error
 	UpdateIsActive(ctx context.Context, id uint, isActive bool) error
-	UpdatePassword(ctx context.Context, id uint, passHash string) error
+	UpdatePasswordHash(ctx context.Context, id uint, passHash string) error
 	UpdateAvatar(ctx context.Context, id uint, avatarUrl string) error
 }
 
@@ -29,12 +29,13 @@ func New(pg postgres.PgClient) (UserManager, error) {
 	}, nil
 }
 
-func (m *userManager) Get(ctx context.Context, id uint) (User, error) {
+func (m *userManager) Get(ctx context.Context, id uint) (*User, error) {
 	db := m.pg.GetDb()
-	return gorm.G[User](db).Where("id = ?", id).First(ctx)
+	user, err := gorm.G[User](db).Where("id = ?", id).First(ctx)
+	return &user, err
 }
 
-func (m *userManager) Register(ctx context.Context, user *User) (*User, error) {
+func (m *userManager) Create(ctx context.Context, user *User) (*User, error) {
 	db := m.pg.GetDb()
 	err := gorm.G[User](db).Create(ctx, user)
 	return user, err
@@ -75,7 +76,7 @@ func (m *userManager) UpdateIsActive(ctx context.Context, id uint, isActive bool
 	return nil
 }
 
-func (m *userManager) UpdatePassword(ctx context.Context, id uint, passHash string) error {
+func (m *userManager) UpdatePasswordHash(ctx context.Context, id uint, passHash string) error {
 	db := m.pg.GetDb()
 	rows, err := gorm.G[User](db).Where("id = ?", id).Update(ctx, "password_hash", passHash)
 	if err != nil {
