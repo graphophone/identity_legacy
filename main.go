@@ -45,10 +45,6 @@ func main() {
 		log.Fatal("Error while connecting to postgres: ", err)
 	}
 	fmt.Println("Connected to Postgres")
-	if err := pgClient.RegisterModels(); err != nil {
-		log.Fatal("Error while registering models")
-	}
-	fmt.Println("Registered models")
 	if err := pgClient.Close(); err != nil {
 		log.Fatal("Error while closing Postgres connection: ", err)
 	}
