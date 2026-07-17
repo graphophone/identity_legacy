@@ -45,7 +45,11 @@ func (u *userManager) GetProfile(ctx context.Context, id uint) (*UserProfile, er
 }
 
 func (u *userManager) Register(ctx context.Context, regData *RegisterUserData) (*UserProfile, error) {
-	user, err := u.db.Create(ctx, &userdb.User{})
+	userModel, err := userFromRegisterUserData(regData)
+	if err != nil {
+		return nil, err
+	}
+	user, err := u.db.Create(ctx, userModel)
 	if err != nil {
 		return nil, err
 	}
@@ -61,11 +65,7 @@ func (u *userManager) UpdatePassword(ctx context.Context, id uint, oldPass strin
 	if err != nil {
 		return err
 	}
-	oldPassHash, err := core.HashPassword(oldPass)
-	if err != nil {
-		return err
-	}
-	if user.PasswordHash != oldPassHash {
+	if !core.IsPasswordValid(oldPass, user.PasswordHash) {
 		return &core.IncorrectPasswordErr{}
 	}
 	newPassHash, err := core.HashPassword(newPass)
@@ -97,10 +97,25 @@ func userFromUpdateUserData(updData *UpdateUserData) *userdb.User {
 		Model: gorm.Model{
 			ID: updData.Id,
 		},
+		Username:  updData.Username,
 		FirstName: updData.FirstName,
 		LastName:  updData.LastName,
 		Bio:       updData.Bio,
 		Country:   updData.Country,
 		City:      updData.City,
 	}
+}
+
+func userFromRegisterUserData(regData *RegisterUserData) (*userdb.User, error) {
+	passHash, err := core.HashPassword(regData.Password)
+	if err != nil {
+		return nil, err
+	}
+	return &userdb.User{
+		Username:     regData.Username,
+		Email:        regData.Email,
+		PasswordHash: passHash,
+		FirstName:    regData.FirstName,
+		LastName:     regData.LastName,
+	}, nil
 }

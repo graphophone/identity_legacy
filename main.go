@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"graphophone.identity/internal/config"
+	"graphophone.identity/internal/core/user"
 	"graphophone.identity/internal/database/postgres"
 	userdb "graphophone.identity/internal/database/postgres/user"
 	"graphophone.identity/internal/database/redis"
@@ -47,41 +48,50 @@ func main() {
 		log.Fatal("Error while connecting to postgres: ", err)
 	}
 	fmt.Println("Connected to Postgres")
-	userManager, err := userdb.New(pgClient)
+	userDb, err := userdb.New(pgClient)
 	if err != nil {
-		log.Fatal("Error while creating user manager: ", err)
+		log.Fatal("Error while creating user db: ", err)
 	}
-	user, err := userManager.Create(ctx, &userdb.User{
-		Username:     "justkinou",
-		Email:        "justkinou@proton.me",
-		PasswordHash: "somehash",
-		FirstName:    "No",
-		LastName:     "Name",
+	um := user.New(userDb)
+	u, err := um.Register(ctx, &user.RegisterUserData{
+		Username: "justkinou",
+		Email:    "justkinou@proton.me",
+		Password: "myPassword",
 	})
 	if err != nil {
-		log.Fatal("Error while adding user: ", err)
+		log.Fatal("Error while registering user: ", err)
 	}
-	fmt.Println("User created: ", user)
-	if user, err := userManager.Get(ctx, user.ID); err != nil {
+	fmt.Println("User created: ", u)
+	if profile, err := um.GetProfile(ctx, u.Id); err != nil {
 		log.Fatal("Error while getting user: ", err)
 	} else {
-		fmt.Println("User read: ", user)
+		fmt.Println("User profile: ", profile)
 	}
-	user.Username = "plainkinou"
-	if err := userManager.Update(ctx, user); err != nil {
+	un := "No"
+	ln := "Name"
+	if err := um.UpdateProfile(ctx, &user.UpdateUserData{
+		Id:        u.Id,
+		Username:  u.Username,
+		Bio:       "My bio",
+		FirstName: &un,
+		LastName:  &ln,
+	}); err != nil {
 		log.Fatal("Error while updating user: ", err)
 	}
-	fmt.Println("User updated: ", user)
-	if err := userManager.UpdateIsActive(ctx, user.ID, false); err != nil {
-		log.Fatal("Error while updating user is_active: ", err)
+	fmt.Println("User updated")
+	if err := um.Deactive(ctx, u.Id); err != nil {
+		log.Fatal("Error while deactivating user profile: ", err)
 	}
-	if err := userManager.UpdatePasswordHash(ctx, user.ID, "another_hash"); err != nil {
-		log.Fatal("Error while updating user password_hash: ", err)
+	if err := um.Activate(ctx, u.Id); err != nil {
+		log.Fatal("Error while activating user profile: ", err)
 	}
-	if err := userManager.UpdateAvatar(ctx, user.ID, "some_avatar_url"); err != nil {
+	if err := um.UpdatePassword(ctx, u.Id, "myPassword", "myNewpassword"); err != nil {
+		log.Fatal("Error while updating user password: ", err)
+	}
+	if err := um.UpdateAvatar(ctx, u.Id, "some_avatar_url"); err != nil {
 		log.Fatal("Error while updating user avatar_url: ", err)
 	}
-	if user, err := userManager.Get(ctx, user.ID); err != nil {
+	if user, err := um.GetProfile(ctx, u.Id); err != nil {
 		log.Fatal("Error while getting user: ", err)
 	} else {
 		fmt.Println("User after updates: ", user)
