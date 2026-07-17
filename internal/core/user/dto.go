@@ -8,11 +8,11 @@ type UserRegistrationData struct {
 	LastName  *string
 }
 
-type UserUpdateData struct {
-	Username  *string
+type UserProfile struct {
+	Username  string
 	FirstName *string
 	LastName  *string
-	City      *string
+	Bio       string
 	Country   *string
-	Bio       *string
+	City      *string
 }

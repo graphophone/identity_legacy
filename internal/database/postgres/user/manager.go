@@ -7,7 +7,7 @@ import (
 	"graphophone.identity/internal/database/postgres"
 )
 
-type UserManager interface {
+type UserDb interface {
 	Get(ctx context.Context, id uint) (*User, error)
 	Create(ctx context.Context, user *User) (*User, error)
 	Update(ctx context.Context, user *User) error
@@ -16,32 +16,32 @@ type UserManager interface {
 	UpdateAvatar(ctx context.Context, id uint, avatarUrl string) error
 }
 
-type userManager struct {
+type userDb struct {
 	pg postgres.PgClient
 }
 
-func New(pg postgres.PgClient) (UserManager, error) {
+func New(pg postgres.PgClient) (UserDb, error) {
 	if err := pg.RegisterModel(&User{}); err != nil {
 		return nil, err
 	}
-	return &userManager{
+	return &userDb{
 		pg: pg,
 	}, nil
 }
 
-func (m *userManager) Get(ctx context.Context, id uint) (*User, error) {
+func (m *userDb) Get(ctx context.Context, id uint) (*User, error) {
 	db := m.pg.GetDb()
 	user, err := gorm.G[User](db).Where("id = ?", id).First(ctx)
 	return &user, err
 }
 
-func (m *userManager) Create(ctx context.Context, user *User) (*User, error) {
+func (m *userDb) Create(ctx context.Context, user *User) (*User, error) {
 	db := m.pg.GetDb()
 	err := gorm.G[User](db).Create(ctx, user)
 	return user, err
 }
 
-func (m *userManager) Update(ctx context.Context, user *User) error {
+func (m *userDb) Update(ctx context.Context, user *User) error {
 	newFields := map[string]any{
 		"username":   user.Username,
 		"first_name": user.FirstName,
@@ -64,7 +64,7 @@ func (m *userManager) Update(ctx context.Context, user *User) error {
 	return nil
 }
 
-func (m *userManager) UpdateIsActive(ctx context.Context, id uint, isActive bool) error {
+func (m *userDb) UpdateIsActive(ctx context.Context, id uint, isActive bool) error {
 	db := m.pg.GetDb()
 	rows, err := gorm.G[User](db).Where("id = ?", id).Update(ctx, "is_active", isActive)
 	if err != nil {
@@ -76,7 +76,7 @@ func (m *userManager) UpdateIsActive(ctx context.Context, id uint, isActive bool
 	return nil
 }
 
-func (m *userManager) UpdatePasswordHash(ctx context.Context, id uint, passHash string) error {
+func (m *userDb) UpdatePasswordHash(ctx context.Context, id uint, passHash string) error {
 	db := m.pg.GetDb()
 	rows, err := gorm.G[User](db).Where("id = ?", id).Update(ctx, "password_hash", passHash)
 	if err != nil {
@@ -88,7 +88,7 @@ func (m *userManager) UpdatePasswordHash(ctx context.Context, id uint, passHash 
 	return nil
 }
 
-func (m *userManager) UpdateAvatar(ctx context.Context, id uint, avatarUrl string) error {
+func (m *userDb) UpdateAvatar(ctx context.Context, id uint, avatarUrl string) error {
 	db := m.pg.GetDb()
 	rows, err := gorm.G[User](db).Where("id = ?", id).Update(ctx, "avatar_url", avatarUrl)
 	if err != nil {

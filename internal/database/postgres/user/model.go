@@ -11,8 +11,8 @@ type User struct {
 	Username     string
 	Email        string
 	PasswordHash string
-	FirstName    string
-	LastName     string
+	FirstName    *string
+	LastName     *string
 	Bio          string `gorm:"default:''"`
 	Country      *string
 	City         *string
