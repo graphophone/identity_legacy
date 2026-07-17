@@ -1,7 +1,7 @@
 package postgres
 
-type NotFound struct{}
+type NotFoundErr struct{}
 
-func (e *NotFound) Error() string {
+func (e *NotFoundErr) Error() string {
 	return "Record not found"
 }

@@ -59,7 +59,7 @@ func (m *userDb) Update(ctx context.Context, user *User) error {
 		return err
 	}
 	if rows != 1 {
-		return &postgres.NotFound{}
+		return &postgres.NotFoundErr{}
 	}
 	return nil
 }
@@ -71,7 +71,7 @@ func (m *userDb) UpdateIsActive(ctx context.Context, id uint, isActive bool) err
 		return err
 	}
 	if rows != 1 {
-		return &postgres.NotFound{}
+		return &postgres.NotFoundErr{}
 	}
 	return nil
 }
@@ -83,7 +83,7 @@ func (m *userDb) UpdatePasswordHash(ctx context.Context, id uint, passHash strin
 		return err
 	}
 	if rows != 1 {
-		return &postgres.NotFound{}
+		return &postgres.NotFoundErr{}
 	}
 	return nil
 }
@@ -95,7 +95,7 @@ func (m *userDb) UpdateAvatar(ctx context.Context, id uint, avatarUrl string) er
 		return err
 	}
 	if rows != 1 {
-		return &postgres.NotFound{}
+		return &postgres.NotFoundErr{}
 	}
 	return nil
 }

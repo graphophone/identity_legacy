@@ -3,13 +3,15 @@ package user
 import (
 	"context"
 
+	"gorm.io/gorm"
+	"graphophone.identity/internal/core"
 	userdb "graphophone.identity/internal/database/postgres/user"
 )
 
 type UserManager interface {
 	GetProfile(ctx context.Context, id uint) (*UserProfile, error)
-	Register(ctx context.Context, regData *UserRegistrationData) error
-	UpdateProfile(ctx context.Context, id uint, userProfile *UserProfile) error
+	Register(ctx context.Context, regData *RegisterUserData) (*UserProfile, error)
+	UpdateProfile(ctx context.Context, updData *UpdateUserData) error
 	UpdatePassword(ctx context.Context, id uint, oldPass, newPass string) error
 	UpdateAvatar(ctx context.Context, id uint, avatarUrl string) error
 	Deactive(ctx context.Context, id uint) error
@@ -26,37 +28,79 @@ func New(db userdb.UserDb) UserManager {
 	}
 }
 
-// Activate implements [UserManager].
 func (u *userManager) Activate(ctx context.Context, id uint) error {
-	panic("unimplemented")
+	return u.db.UpdateIsActive(ctx, id, true)
 }
 
-// Deactive implements [UserManager].
 func (u *userManager) Deactive(ctx context.Context, id uint) error {
-	panic("unimplemented")
+	return u.db.UpdateIsActive(ctx, id, false)
 }
 
-// GetProfile implements [UserManager].
 func (u *userManager) GetProfile(ctx context.Context, id uint) (*UserProfile, error) {
-	panic("unimplemented")
+	user, err := u.db.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return userProfileFromUser(user), nil
 }
 
-// Register implements [UserManager].
-func (u *userManager) Register(ctx context.Context, regData *UserRegistrationData) error {
-	panic("unimplemented")
+func (u *userManager) Register(ctx context.Context, regData *RegisterUserData) (*UserProfile, error) {
+	user, err := u.db.Create(ctx, &userdb.User{})
+	if err != nil {
+		return nil, err
+	}
+	return userProfileFromUser(user), nil
 }
 
-// UpdateAvatar implements [UserManager].
 func (u *userManager) UpdateAvatar(ctx context.Context, id uint, avatarUrl string) error {
-	panic("unimplemented")
+	return u.db.UpdateAvatar(ctx, id, avatarUrl)
 }
 
-// UpdatePassword implements [UserManager].
 func (u *userManager) UpdatePassword(ctx context.Context, id uint, oldPass string, newPass string) error {
-	panic("unimplemented")
+	user, err := u.db.Get(ctx, id)
+	if err != nil {
+		return err
+	}
+	oldPassHash, err := core.HashPassword(oldPass)
+	if err != nil {
+		return err
+	}
+	if user.PasswordHash != oldPassHash {
+		return &core.IncorrectPasswordErr{}
+	}
+	newPassHash, err := core.HashPassword(newPass)
+	if err != nil {
+		return err
+	}
+	return u.db.UpdatePasswordHash(ctx, id, newPassHash)
 }
 
-// UpdateProfile implements [UserManager].
-func (u *userManager) UpdateProfile(ctx context.Context, id uint, userProfile *UserProfile) error {
-	panic("unimplemented")
+func (u *userManager) UpdateProfile(ctx context.Context, updData *UpdateUserData) error {
+	return u.db.Update(ctx, userFromUpdateUserData(updData))
+}
+
+func userProfileFromUser(user *userdb.User) *UserProfile {
+	return &UserProfile{
+		Id:        user.ID,
+		Username:  user.Username,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Bio:       user.Bio,
+		Country:   user.Country,
+		City:      user.City,
+		AvatarUrl: user.AvatarUrl,
+	}
+}
+
+func userFromUpdateUserData(updData *UpdateUserData) *userdb.User {
+	return &userdb.User{
+		Model: gorm.Model{
+			ID: updData.Id,
+		},
+		FirstName: updData.FirstName,
+		LastName:  updData.LastName,
+		Bio:       updData.Bio,
+		Country:   updData.Country,
+		City:      updData.City,
+	}
 }
