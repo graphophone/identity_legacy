@@ -9,12 +9,14 @@ import (
 type Config interface {
 	Redis() *RedisConfig
 	Postgres() *PostgresConfig
+	Jwt() *JwtConfig
 }
 
 type config struct {
 	rawConfig *koanf.Koanf
 	redis     *RedisConfig
 	postgres  *PostgresConfig
+	jwt       *JwtConfig
 }
 
 func LoadConfig(configPath string) (Config, error) {
@@ -37,4 +39,8 @@ func (c *config) Redis() *RedisConfig {
 
 func (c *config) Postgres() *PostgresConfig {
 	return c.postgres
+}
+
+func (c *config) Jwt() *JwtConfig {
+	return c.jwt
 }
