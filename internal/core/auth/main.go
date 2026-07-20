@@ -1,44 +1,67 @@
 package auth
 
 import (
+	"context"
+
+	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 	"graphophone.identity/internal/config"
+	"graphophone.identity/internal/core"
+	"graphophone.identity/internal/core/jwt"
 	"graphophone.identity/internal/core/user"
+	userdb "graphophone.identity/internal/database/postgres/user"
 )
 
 type AuthManager interface {
-	Login(username, password string) (*Tokens, error)
-	Register(regData *user.RegisterUserData) (*Tokens, error)
-	Refresh(refreshToken string) (*Tokens, error)
-	Logout(tokens *Tokens) error
+	Login(ctx context.Context, username, password string) (*Tokens, error)
+	Register(ctx context.Context, regData *user.RegisterUserData) (*Tokens, error)
+	Refresh(ctx context.Context, refreshToken string) (*Tokens, error)
+	Logout(ctx context.Context, tokens *Tokens) error
 }
 
 type authManager struct {
+	userDb             userdb.UserDb
+	redisClient        *redis.Client
 	jwtConfig          *config.JwtConfig
 	refreshTokenConfig *config.RefreshTokenConfig
-	redisClient        *redis.Client
 }
 
-func New(redisClient *redis.Client, cfg config.Config) AuthManager {
+func New(userDb userdb.UserDb, redisClient *redis.Client, cfg config.Config) AuthManager {
 	return &authManager{
+		userDb:             userDb,
+		redisClient:        redisClient,
 		jwtConfig:          cfg.Jwt(),
 		refreshTokenConfig: cfg.RefreshToken(),
-		redisClient:        redisClient,
 	}
 }
 
-func (m *authManager) Login(username, password string) (*Tokens, error) {
+func (m *authManager) Login(ctx context.Context, username, password string) (*Tokens, error) {
+	user, err := m.userDb.GetByUsername(ctx, username)
+	if err != nil {
+		return nil, err
+	}
+	if !core.IsPasswordValid(password, user.PasswordHash) {
+		return nil, &core.IncorrectPasswordErr{}
+	}
+	accessToken, err := jwt.GenerateJwtToken(user.ID, user.Username, m.jwtConfig)
+	if err != nil {
+		return nil, err
+	}
+	refreshToken := uuid.NewString()
+	return &Tokens{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}, nil
+}
+
+func (m *authManager) Register(ctx context.Context, regData *user.RegisterUserData) (*Tokens, error) {
 	return nil, nil
 }
 
-func (m *authManager) Register(regData *user.RegisterUserData) (*Tokens, error) {
+func (m *authManager) Refresh(ctx context.Context, refreshToken string) (*Tokens, error) {
 	return nil, nil
 }
 
-func (m *authManager) Refresh(refreshToken string) (*Tokens, error) {
-	return nil, nil
-}
-
-func (m *authManager) Logout(tokens *Tokens) error {
+func (m *authManager) Logout(ctx context.Context, tokens *Tokens) error {
 	return nil
 }

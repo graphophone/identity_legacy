@@ -7,14 +7,13 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	_jwt "github.com/golang-jwt/jwt/v5"
 	"graphophone.identity/internal/config"
-	userdb "graphophone.identity/internal/database/postgres/user"
 )
 
-func GenerateJwtToken(user *userdb.User, cfg *config.JwtConfig) (string, error) {
+func GenerateJwtToken(id uint, username string, cfg *config.JwtConfig) (string, error) {
 	claims := _jwt.RegisteredClaims{
 		ExpiresAt: _jwt.NewNumericDate(time.Now().Add(cfg.ExpirationTime)),
-		Subject:   user.Username,
-		ID:        fmt.Sprintf("%d", user.ID),
+		Subject:   username,
+		ID:        fmt.Sprintf("%d", id),
 	}
 	token := _jwt.NewWithClaims(
 		_jwt.SigningMethodHS256,
