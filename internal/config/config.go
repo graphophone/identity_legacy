@@ -10,13 +10,15 @@ type Config interface {
 	Redis() *RedisConfig
 	Postgres() *PostgresConfig
 	Jwt() *JwtConfig
+	RefreshToken() *RefreshTokenConfig
 }
 
 type config struct {
-	rawConfig *koanf.Koanf
-	redis     *RedisConfig
-	postgres  *PostgresConfig
-	jwt       *JwtConfig
+	rawConfig    *koanf.Koanf
+	redis        *RedisConfig
+	postgres     *PostgresConfig
+	jwt          *JwtConfig
+	refreshToken *RefreshTokenConfig
 }
 
 func LoadConfig(configPath string) (Config, error) {
@@ -30,6 +32,7 @@ func LoadConfig(configPath string) (Config, error) {
 	cfg.loadRedisConfigFromRaw()
 	cfg.loadPostgresConfigFromRaw()
 	cfg.loadJwtConfigFromRaw()
+	cfg.loadRefreshTokenConfigFromRaw()
 
 	return &cfg, err
 }
@@ -44,4 +47,8 @@ func (c *config) Postgres() *PostgresConfig {
 
 func (c *config) Jwt() *JwtConfig {
 	return c.jwt
+}
+
+func (c *config) RefreshToken() *RefreshTokenConfig {
+	return c.refreshToken
 }

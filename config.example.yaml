@@ -10,3 +10,10 @@ postgres:
   password: my-postgres-pass
   database: identity-db
   timeout: 30s
+
+jwt:
+  key: "some key"
+  expirationTime: 15m
+
+refreshToken:
+  expirationTime: 7d
