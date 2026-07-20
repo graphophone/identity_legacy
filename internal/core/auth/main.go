@@ -8,13 +8,11 @@ import (
 	"graphophone.identity/internal/config"
 	"graphophone.identity/internal/core"
 	"graphophone.identity/internal/core/jwt"
-	"graphophone.identity/internal/core/user"
 	userdb "graphophone.identity/internal/database/postgres/user"
 )
 
 type AuthManager interface {
 	Login(ctx context.Context, username, password string) (*Tokens, error)
-	Register(ctx context.Context, regData *user.RegisterUserData) (*Tokens, error)
 	Refresh(ctx context.Context, refreshToken string) (*Tokens, error)
 	Logout(ctx context.Context, tokens *Tokens) error
 }
@@ -52,10 +50,6 @@ func (m *authManager) Login(ctx context.Context, username, password string) (*To
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}, nil
-}
-
-func (m *authManager) Register(ctx context.Context, regData *user.RegisterUserData) (*Tokens, error) {
-	return nil, nil
 }
 
 func (m *authManager) Refresh(ctx context.Context, refreshToken string) (*Tokens, error) {
