@@ -10,7 +10,7 @@ import (
 	userdb "graphophone.identity/internal/database/postgres/user"
 )
 
-func GenerateJwtToken(user *userdb.User, cfg config.JwtConfig) (string, error) {
+func GenerateJwtToken(user *userdb.User, cfg *config.JwtConfig) (string, error) {
 	claims := _jwt.RegisteredClaims{
 		ExpiresAt: _jwt.NewNumericDate(time.Now().Add(cfg.ExpirationTime)),
 		Subject:   user.Username,
@@ -23,7 +23,7 @@ func GenerateJwtToken(user *userdb.User, cfg config.JwtConfig) (string, error) {
 	return token.SignedString([]byte(cfg.Key))
 }
 
-func IsValidJwt(tokenString string, cfg config.JwtConfig) bool {
+func IsValidJwt(tokenString string, cfg *config.JwtConfig) bool {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		return []byte(cfg.Key), nil
 	})
@@ -37,7 +37,7 @@ func IsValidJwt(tokenString string, cfg config.JwtConfig) bool {
 	return !time.Now().After(expTime.Time)
 }
 
-func GetClaims(tokenString string, cfg config.JwtConfig) (_jwt.Claims, error) {
+func GetClaims(tokenString string, cfg *config.JwtConfig) (_jwt.Claims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		return []byte(cfg.Key), nil
 	})
