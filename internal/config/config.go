@@ -29,6 +29,7 @@ func LoadConfig(configPath string) (Config, error) {
 
 	cfg.loadRedisConfigFromRaw()
 	cfg.loadPostgresConfigFromRaw()
+	cfg.loadJwtConfigFromRaw()
 
 	return &cfg, err
 }
