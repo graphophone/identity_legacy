@@ -3,12 +3,12 @@ package redis
 import (
 	"context"
 
-	"github.com/redis/go-redis/v9"
+	_redis "github.com/redis/go-redis/v9"
 	"graphophone.identity/internal/config"
 )
 
-func Connect(ctx context.Context, cfg *config.RedisConfig) (*redis.Client, error) {
-	client := redis.NewClient(&redis.Options{
+func Connect(ctx context.Context, cfg *config.RedisConfig) (*_redis.Client, error) {
+	client := _redis.NewClient(&_redis.Options{
 		Addr:     cfg.Address,
 		Password: cfg.Password,
 		DB:       cfg.Database,
