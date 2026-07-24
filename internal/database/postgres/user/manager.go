@@ -9,6 +9,7 @@ import (
 
 type UserDb interface {
 	Get(ctx context.Context, id uint) (*User, error)
+	GetByUsername(ctx context.Context, username string) (*User, error)
 	Create(ctx context.Context, user *User) (*User, error)
 	Update(ctx context.Context, user *User) error
 	UpdateIsActive(ctx context.Context, id uint, isActive bool) error
@@ -32,6 +33,12 @@ func New(pg postgres.PgClient) (UserDb, error) {
 func (m *userDb) Get(ctx context.Context, id uint) (*User, error) {
 	db := m.pg.GetDb()
 	user, err := gorm.G[User](db).Where("id = ?", id).First(ctx)
+	return &user, err
+}
+
+func (m *userDb) GetByUsername(ctx context.Context, username string) (*User, error) {
+	db := m.pg.GetDb()
+	user, err := gorm.G[User](db).Where("username = ?", username).First(ctx)
 	return &user, err
 }
 
