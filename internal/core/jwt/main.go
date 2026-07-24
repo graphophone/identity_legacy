@@ -9,10 +9,9 @@ import (
 	"graphophone.identity/internal/config"
 )
 
-func GenerateJwtToken(id uint, username string, cfg *config.JwtConfig) (string, error) {
+func GenerateJwtToken(id uint, cfg *config.JwtConfig) (string, error) {
 	claims := _jwt.RegisteredClaims{
 		ExpiresAt: _jwt.NewNumericDate(time.Now().Add(cfg.ExpirationTime)),
-		Subject:   username,
 		ID:        fmt.Sprintf("%d", id),
 	}
 	token := _jwt.NewWithClaims(

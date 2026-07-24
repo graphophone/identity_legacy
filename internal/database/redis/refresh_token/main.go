@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"strconv"
 
+	"github.com/google/uuid"
 	_redis "github.com/redis/go-redis/v9"
 	"graphophone.identity/internal/config"
 	"graphophone.identity/internal/database/redis"
 )
 
 type RefreshTokenCache interface {
-	Save(ctx context.Context, userId uint, refreshToken string) error
+	Save(ctx context.Context, userId uint) (string, error)
 	Remove(ctx context.Context, refreshToken string) error
 	GetUserId(ctx context.Context, refreshToken string) (uint, error)
 }
@@ -27,16 +28,20 @@ func New(redisClient *_redis.Client) RefreshTokenCache {
 	}
 }
 
-func (c *refreshTokenCache) Save(ctx context.Context, userId uint, refreshToken string) error {
+func (c *refreshTokenCache) Save(ctx context.Context, userId uint) (string, error) {
+	refreshToken := uuid.NewString()
 	data := map[string]any{
 		"userId":  userId,
 		"isValid": true,
 	}
 	dataString, err := json.Marshal(data)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return c.redisClient.Set(ctx, refreshToken, dataString, c.cfg.ExpirationTime).Err()
+	if err := c.redisClient.Set(ctx, refreshToken, dataString, c.cfg.ExpirationTime).Err(); err != nil {
+		return "", err
+	}
+	return refreshToken, nil
 }
 
 func (c *refreshTokenCache) Remove(ctx context.Context, refreshToken string) error {
