@@ -16,4 +16,4 @@ jwt:
   expirationTime: 15m
 
 refreshToken:
-  expirationTime: 7d
+  expirationTime: 168h

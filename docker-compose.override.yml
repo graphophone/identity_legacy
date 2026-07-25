@@ -45,6 +45,8 @@ services:
     networks:
       - redis-network
       - postgres-network
+    volumes:
+      - .:/app
 
 networks:
   redis-network:

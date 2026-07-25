@@ -1,0 +1,7 @@
+[build]
+cmd = "go run ."
+dir = "."
+include_ext = ["go"]
+
+[log]
+level = "debug"
