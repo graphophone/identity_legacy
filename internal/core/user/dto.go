@@ -15,7 +15,7 @@ type UserProfile struct {
 	Username  string
 	FirstName *string
 	LastName  *string
-	Bio       string
+	Bio       *string
 	Country   *string
 	City      *string
 	AvatarUrl *string
@@ -34,7 +34,7 @@ type UpdateProfileData struct {
 	Username  string
 	FirstName *string
 	LastName  *string
-	Bio       string
+	Bio       *string
 	Country   *string
 	City      *string
 }

@@ -72,7 +72,6 @@ func main() {
 	if err := um.UpdateProfile(ctx, &user.UpdateProfileData{
 		Id:        u.Id,
 		Username:  u.Username,
-		Bio:       "My bio",
 		FirstName: &un,
 		LastName:  &ln,
 	}); err != nil {
