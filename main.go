@@ -69,7 +69,7 @@ func main() {
 	}
 	un := "No"
 	ln := "Name"
-	if err := um.UpdateProfile(ctx, &user.UpdateUserData{
+	if err := um.UpdateProfile(ctx, &user.UpdateProfileData{
 		Id:        u.Id,
 		Username:  u.Username,
 		Bio:       "My bio",

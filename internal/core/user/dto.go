@@ -29,7 +29,7 @@ func (u *UserProfile) String() string {
 	return string(out)
 }
 
-type UpdateUserData struct {
+type UpdateProfileData struct {
 	Id        uint
 	Username  string
 	FirstName *string
