@@ -8,13 +8,10 @@ import (
 
 type UserServer struct {
 	user.UnimplementedUserServiceServer
-	ctx context.Context
 }
 
-func NewUserServer(ctx context.Context) user.UserServiceServer {
-	return &UserServer{
-		ctx: ctx,
-	}
+func NewUserServer() user.UserServiceServer {
+	return &UserServer{}
 }
 
 func (u *UserServer) ActivateUserProfile(context.Context, *user.ActivateUserProfileRequest) (*user.Empty, error) {

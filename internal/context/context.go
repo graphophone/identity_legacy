@@ -25,7 +25,7 @@ type customContext struct {
 	authManager auth.AuthManager
 }
 
-func NewContext(cfg config.Config) (Context, error) {
+func newCustomContext(cfg config.Config) (*customContext, error) {
 	baseCtx := context.Background()
 
 	pg, err := postgres.New(cfg.Postgres())
@@ -47,7 +47,6 @@ func NewContext(cfg config.Config) (Context, error) {
 
 	return &customContext{
 		cfg:         cfg,
-		Context:     baseCtx,
 		userManager: userManager,
 		authManager: authManager,
 	}, nil

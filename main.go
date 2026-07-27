@@ -1,12 +1,13 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
 	"google.golang.org/grpc"
 	"graphophone.identity/internal/config"
+	"graphophone.identity/internal/context"
+	"graphophone.identity/internal/middleware"
 	"graphophone.identity/internal/services"
 	"graphophone.identity/internal/services/common/user"
 )
@@ -21,8 +22,10 @@ func main() {
 		log.Fatal("Error while reading config:", err)
 	}
 
-	baseCtx := context.Background()
-	ctx := context.WithValue(baseCtx, "config", cfg)
+	cb, err := context.NewContextBuilder(cfg)
+	if err != nil {
+		log.Fatal("Error while creating context builder (configuring core dependencies):", err)
+	}
 
 	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
@@ -35,8 +38,10 @@ func main() {
 		}
 	}()
 
-	grpcServer := grpc.NewServer()
-	user.RegisterUserServiceServer(grpcServer, services.NewUserServer(ctx))
+	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(
+		middleware.ContextPropagationUnaryServerInterceptor(cb),
+	))
+	user.RegisterUserServiceServer(grpcServer, services.NewUserServer())
 
 	log.Print("Serving grpc on port 8080")
 	if err := grpcServer.Serve(lis); err != nil {
