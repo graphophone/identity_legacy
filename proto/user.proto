@@ -6,7 +6,15 @@ option go_package = "graphophone.identity/internal/services/common/user";
 
 service UserService {
     rpc RegisterUser(RegisterUserRequest) returns (UserProfile) {}
+    rpc GetUserProfile(GetProfileRequest) returns (UserProfile) {}
+    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (Empty) {}
+    rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (Empty) {}
+    rpc UpdateUserAvatar(UpdateUserAvatarRequest) returns (Empty) {}
+    rpc DeactivateUser(DeactivateUserProfileRequest) returns (Empty) {}
+    rpc ActivateUserProfile(ActivateUserProfileRequest) returns (Empty) {}
 }
+
+message Empty {}
 
 message UserProfile {
     uint32 id = 1;
@@ -31,24 +39,31 @@ message GetProfileRequest {
     uint32 user_id = 1;
 }
 
-message UpdateProfileRequest {
-    string username = 1;
-    optional string first_name = 2;
-    optional string last_name = 3;
-    optional string bio = 4;
-    optional string country = 5;
-    optional string city = 6;
+message UpdateUserProfileRequest {
+    uint32 user_id = 1;
+    string username = 2;
+    optional string first_name = 3;
+    optional string last_name = 4;
+    optional string bio = 5;
+    optional string country = 6;
+    optional string city = 7;
 }
 
 message UpdateUserPasswordRequest {
-    string old_password = 1;
-    string new_password = 2;
+    uint32 user_id = 1;
+    string old_password = 2;
+    string new_password = 3;
 }
 
 message UpdateUserAvatarRequest {
-    bytes image = 1;
+    uint32 user_id = 1;
+    bytes image = 2;
 }
 
-message DeactivateUserProfileRequest {}
+message DeactivateUserProfileRequest {
+    uint32 user_id = 1;
+}
 
-message ActivateUserProfileRequest {}
+message ActivateUserProfileRequest {
+    uint32 user_id = 1;
+}
