@@ -12,12 +12,6 @@ import (
 	refreshtoken "graphophone.identity/internal/database/redis/refresh_token"
 )
 
-type Context interface {
-	context.Context
-	GetUserManager() user.UserManager
-	GetAuthManager() auth.AuthManager
-}
-
 type customContext struct {
 	context.Context
 	cfg         config.Config
@@ -50,12 +44,4 @@ func newCustomContext(cfg config.Config) (*customContext, error) {
 		userManager: userManager,
 		authManager: authManager,
 	}, nil
-}
-
-func (c *customContext) GetAuthManager() auth.AuthManager {
-	return c.GetAuthManager()
-}
-
-func (c *customContext) GetUserManager() user.UserManager {
-	return c.GetUserManager()
 }
