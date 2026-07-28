@@ -6,7 +6,7 @@ import (
 
 	"google.golang.org/grpc"
 	"graphophone.identity/internal/config"
-	"graphophone.identity/internal/context"
+	ccontext "graphophone.identity/internal/context"
 	"graphophone.identity/internal/middleware"
 	"graphophone.identity/internal/services"
 	"graphophone.identity/internal/services/common/user"
@@ -22,7 +22,7 @@ func main() {
 		log.Fatal("Error while reading config:", err)
 	}
 
-	cb, err := context.NewContextBuilder(cfg)
+	cb, err := ccontext.NewContextBuilder(cfg)
 	if err != nil {
 		log.Fatal("Error while creating context builder (configuring core dependencies):", err)
 	}

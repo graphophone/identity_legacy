@@ -1,11 +1,11 @@
-package auth
+package authcore
 
 import (
 	"context"
 
 	"graphophone.identity/internal/config"
 	"graphophone.identity/internal/core"
-	"graphophone.identity/internal/core/jwt"
+	jwtcore "graphophone.identity/internal/core/jwt"
 	userdb "graphophone.identity/internal/database/postgres/user"
 	refreshtoken "graphophone.identity/internal/database/redis/refresh_token"
 )
@@ -63,7 +63,7 @@ func (m *authManager) Logout(ctx context.Context, refreshToken string) error {
 }
 
 func (m *authManager) generateTokens(ctx context.Context, userId uint) (*Tokens, error) {
-	accessToken, err := jwt.GenerateJwtToken(userId, m.jwtConfig)
+	accessToken, err := jwtcore.GenerateJwtToken(userId, m.jwtConfig)
 	if err != nil {
 		return nil, err
 	}

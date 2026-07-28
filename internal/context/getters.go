@@ -1,13 +1,13 @@
-package context
+package ccontext
 
 import (
 	"context"
 
-	"graphophone.identity/internal/core/auth"
-	"graphophone.identity/internal/core/user"
+	authcore "graphophone.identity/internal/core/auth"
+	usercore "graphophone.identity/internal/core/user"
 )
 
-func GetUserManager(ctx context.Context) (user.UserManager, error) {
+func GetUserManager(ctx context.Context) (usercore.UserManager, error) {
 	customContext, ok := ctx.(customContext)
 	if !ok {
 		return nil, &InvalidContextType{}
@@ -15,7 +15,7 @@ func GetUserManager(ctx context.Context) (user.UserManager, error) {
 	return customContext.userManager, nil
 }
 
-func GetAuthManager(ctx context.Context) (auth.AuthManager, error) {
+func GetAuthManager(ctx context.Context) (authcore.AuthManager, error) {
 	customContext, ok := ctx.(customContext)
 	if !ok {
 		return nil, &InvalidContextType{}
