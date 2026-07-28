@@ -1,4 +1,4 @@
-package jwt
+package jwtcore
 
 import (
 	"fmt"

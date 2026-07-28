@@ -1,4 +1,4 @@
-package user
+package usercore
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 type UserManager interface {
 	GetProfile(ctx context.Context, id uint) (*UserProfile, error)
 	Register(ctx context.Context, regData *RegisterUserData) (*UserProfile, error)
-	UpdateProfile(ctx context.Context, updData *UpdateUserData) error
+	UpdateProfile(ctx context.Context, updData *UpdateProfileData) error
 	UpdatePassword(ctx context.Context, id uint, oldPass, newPass string) error
 	UpdateAvatar(ctx context.Context, id uint, avatarUrl string) error
 	Deactive(ctx context.Context, id uint) error
@@ -75,7 +75,7 @@ func (u *userManager) UpdatePassword(ctx context.Context, id uint, oldPass strin
 	return u.db.UpdatePasswordHash(ctx, id, newPassHash)
 }
 
-func (u *userManager) UpdateProfile(ctx context.Context, updData *UpdateUserData) error {
+func (u *userManager) UpdateProfile(ctx context.Context, updData *UpdateProfileData) error {
 	return u.db.Update(ctx, userFromUpdateUserData(updData))
 }
 
@@ -92,7 +92,7 @@ func userProfileFromUser(user *userdb.User) *UserProfile {
 	}
 }
 
-func userFromUpdateUserData(updData *UpdateUserData) *userdb.User {
+func userFromUpdateUserData(updData *UpdateProfileData) *userdb.User {
 	return &userdb.User{
 		Model: gorm.Model{
 			ID: updData.Id,

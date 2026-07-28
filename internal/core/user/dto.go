@@ -1,4 +1,4 @@
-package user
+package usercore
 
 import "encoding/json"
 
@@ -15,7 +15,7 @@ type UserProfile struct {
 	Username  string
 	FirstName *string
 	LastName  *string
-	Bio       string
+	Bio       *string
 	Country   *string
 	City      *string
 	AvatarUrl *string
@@ -29,12 +29,12 @@ func (u *UserProfile) String() string {
 	return string(out)
 }
 
-type UpdateUserData struct {
+type UpdateProfileData struct {
 	Id        uint
 	Username  string
 	FirstName *string
 	LastName  *string
-	Bio       string
+	Bio       *string
 	Country   *string
 	City      *string
 }
