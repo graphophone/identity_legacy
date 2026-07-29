@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "graphophone.identity/internal/services/common/auth";
+
+service AuthService {
+    rpc SignUp(SignUpRequest) returns (Tokens) {}
+    rpc Login(LoginRequest) returns (Tokens) {}
+    rpc Refresh(RefreshRequest) returns (Tokens) {}
+    rpc Logout(LogoutRequest) returns (Empty) {}
+    rpc LogoutEverywhere(LogoutRequest) returns (Empty) {}
+}
