@@ -157,82 +157,6 @@ func (x *UserProfile) GetAvatarUrl() string {
 	return ""
 }
 
-type RegisterUserRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
-	Email         string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	FirstName     *string                `protobuf:"bytes,4,opt,name=first_name,json=firstName,proto3,oneof" json:"first_name,omitempty"`
-	LastName      *string                `protobuf:"bytes,5,opt,name=last_name,json=lastName,proto3,oneof" json:"last_name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *RegisterUserRequest) Reset() {
-	*x = RegisterUserRequest{}
-	mi := &file_user_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *RegisterUserRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RegisterUserRequest) ProtoMessage() {}
-
-func (x *RegisterUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RegisterUserRequest.ProtoReflect.Descriptor instead.
-func (*RegisterUserRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *RegisterUserRequest) GetUsername() string {
-	if x != nil {
-		return x.Username
-	}
-	return ""
-}
-
-func (x *RegisterUserRequest) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-func (x *RegisterUserRequest) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
-}
-
-func (x *RegisterUserRequest) GetFirstName() string {
-	if x != nil && x.FirstName != nil {
-		return *x.FirstName
-	}
-	return ""
-}
-
-func (x *RegisterUserRequest) GetLastName() string {
-	if x != nil && x.LastName != nil {
-		return *x.LastName
-	}
-	return ""
-}
-
 type GetProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -242,7 +166,7 @@ type GetProfileRequest struct {
 
 func (x *GetProfileRequest) Reset() {
 	*x = GetProfileRequest{}
-	mi := &file_user_proto_msgTypes[3]
+	mi := &file_user_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -254,7 +178,7 @@ func (x *GetProfileRequest) String() string {
 func (*GetProfileRequest) ProtoMessage() {}
 
 func (x *GetProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[3]
+	mi := &file_user_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -267,7 +191,7 @@ func (x *GetProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetProfileRequest.ProtoReflect.Descriptor instead.
 func (*GetProfileRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{3}
+	return file_user_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetProfileRequest) GetUserId() uint32 {
@@ -292,7 +216,7 @@ type UpdateUserProfileRequest struct {
 
 func (x *UpdateUserProfileRequest) Reset() {
 	*x = UpdateUserProfileRequest{}
-	mi := &file_user_proto_msgTypes[4]
+	mi := &file_user_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -304,7 +228,7 @@ func (x *UpdateUserProfileRequest) String() string {
 func (*UpdateUserProfileRequest) ProtoMessage() {}
 
 func (x *UpdateUserProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[4]
+	mi := &file_user_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -317,7 +241,7 @@ func (x *UpdateUserProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserProfileRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserProfileRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{4}
+	return file_user_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *UpdateUserProfileRequest) GetUserId() uint32 {
@@ -380,7 +304,7 @@ type UpdateUserPasswordRequest struct {
 
 func (x *UpdateUserPasswordRequest) Reset() {
 	*x = UpdateUserPasswordRequest{}
-	mi := &file_user_proto_msgTypes[5]
+	mi := &file_user_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -392,7 +316,7 @@ func (x *UpdateUserPasswordRequest) String() string {
 func (*UpdateUserPasswordRequest) ProtoMessage() {}
 
 func (x *UpdateUserPasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[5]
+	mi := &file_user_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -405,7 +329,7 @@ func (x *UpdateUserPasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPasswordRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserPasswordRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{5}
+	return file_user_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UpdateUserPasswordRequest) GetUserId() uint32 {
@@ -439,7 +363,7 @@ type UpdateUserAvatarRequest struct {
 
 func (x *UpdateUserAvatarRequest) Reset() {
 	*x = UpdateUserAvatarRequest{}
-	mi := &file_user_proto_msgTypes[6]
+	mi := &file_user_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -451,7 +375,7 @@ func (x *UpdateUserAvatarRequest) String() string {
 func (*UpdateUserAvatarRequest) ProtoMessage() {}
 
 func (x *UpdateUserAvatarRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[6]
+	mi := &file_user_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -464,7 +388,7 @@ func (x *UpdateUserAvatarRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserAvatarRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserAvatarRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{6}
+	return file_user_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UpdateUserAvatarRequest) GetUserId() uint32 {
@@ -490,7 +414,7 @@ type DeactivateUserProfileRequest struct {
 
 func (x *DeactivateUserProfileRequest) Reset() {
 	*x = DeactivateUserProfileRequest{}
-	mi := &file_user_proto_msgTypes[7]
+	mi := &file_user_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -502,7 +426,7 @@ func (x *DeactivateUserProfileRequest) String() string {
 func (*DeactivateUserProfileRequest) ProtoMessage() {}
 
 func (x *DeactivateUserProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[7]
+	mi := &file_user_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -515,7 +439,7 @@ func (x *DeactivateUserProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeactivateUserProfileRequest.ProtoReflect.Descriptor instead.
 func (*DeactivateUserProfileRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{7}
+	return file_user_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *DeactivateUserProfileRequest) GetUserId() uint32 {
@@ -534,7 +458,7 @@ type ActivateUserProfileRequest struct {
 
 func (x *ActivateUserProfileRequest) Reset() {
 	*x = ActivateUserProfileRequest{}
-	mi := &file_user_proto_msgTypes[8]
+	mi := &file_user_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -546,7 +470,7 @@ func (x *ActivateUserProfileRequest) String() string {
 func (*ActivateUserProfileRequest) ProtoMessage() {}
 
 func (x *ActivateUserProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_proto_msgTypes[8]
+	mi := &file_user_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -559,7 +483,7 @@ func (x *ActivateUserProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActivateUserProfileRequest.ProtoReflect.Descriptor instead.
 func (*ActivateUserProfileRequest) Descriptor() ([]byte, []int) {
-	return file_user_proto_rawDescGZIP(), []int{8}
+	return file_user_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ActivateUserProfileRequest) GetUserId() uint32 {
@@ -594,17 +518,7 @@ const file_user_proto_rawDesc = "" +
 	"\n" +
 	"\b_countryB\a\n" +
 	"\x05_cityB\r\n" +
-	"\v_avatar_url\"\xc6\x01\n" +
-	"\x13RegisterUserRequest\x12\x1a\n" +
-	"\busername\x18\x01 \x01(\tR\busername\x12\x14\n" +
-	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\"\n" +
-	"\n" +
-	"first_name\x18\x04 \x01(\tH\x00R\tfirstName\x88\x01\x01\x12 \n" +
-	"\tlast_name\x18\x05 \x01(\tH\x01R\blastName\x88\x01\x01B\r\n" +
-	"\v_first_nameB\f\n" +
-	"\n" +
-	"_last_name\",\n" +
+	"\v_avatar_url\",\n" +
 	"\x11GetProfileRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\rR\x06userId\"\x9e\x02\n" +
 	"\x18UpdateUserProfileRequest\x12\x17\n" +
@@ -633,9 +547,8 @@ const file_user_proto_rawDesc = "" +
 	"\x1cDeactivateUserProfileRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\rR\x06userId\"5\n" +
 	"\x1aActivateUserProfileRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\rR\x06userId2\xe6\x03\n" +
+	"\auser_id\x18\x01 \x01(\rR\x06userId2\xa6\x03\n" +
 	"\vUserService\x12>\n" +
-	"\fRegisterUser\x12\x19.user.RegisterUserRequest\x1a\x11.user.UserProfile\"\x00\x12>\n" +
 	"\x0eGetUserProfile\x12\x17.user.GetProfileRequest\x1a\x11.user.UserProfile\"\x00\x12B\n" +
 	"\x11UpdateUserProfile\x12\x1e.user.UpdateUserProfileRequest\x1a\v.user.Empty\"\x00\x12D\n" +
 	"\x12UpdateUserPassword\x12\x1f.user.UpdateUserPasswordRequest\x1a\v.user.Empty\"\x00\x12@\n" +
@@ -655,35 +568,32 @@ func file_user_proto_rawDescGZIP() []byte {
 	return file_user_proto_rawDescData
 }
 
-var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_user_proto_goTypes = []any{
 	(*Empty)(nil),                        // 0: user.Empty
 	(*UserProfile)(nil),                  // 1: user.UserProfile
-	(*RegisterUserRequest)(nil),          // 2: user.RegisterUserRequest
-	(*GetProfileRequest)(nil),            // 3: user.GetProfileRequest
-	(*UpdateUserProfileRequest)(nil),     // 4: user.UpdateUserProfileRequest
-	(*UpdateUserPasswordRequest)(nil),    // 5: user.UpdateUserPasswordRequest
-	(*UpdateUserAvatarRequest)(nil),      // 6: user.UpdateUserAvatarRequest
-	(*DeactivateUserProfileRequest)(nil), // 7: user.DeactivateUserProfileRequest
-	(*ActivateUserProfileRequest)(nil),   // 8: user.ActivateUserProfileRequest
+	(*GetProfileRequest)(nil),            // 2: user.GetProfileRequest
+	(*UpdateUserProfileRequest)(nil),     // 3: user.UpdateUserProfileRequest
+	(*UpdateUserPasswordRequest)(nil),    // 4: user.UpdateUserPasswordRequest
+	(*UpdateUserAvatarRequest)(nil),      // 5: user.UpdateUserAvatarRequest
+	(*DeactivateUserProfileRequest)(nil), // 6: user.DeactivateUserProfileRequest
+	(*ActivateUserProfileRequest)(nil),   // 7: user.ActivateUserProfileRequest
 }
 var file_user_proto_depIdxs = []int32{
-	2, // 0: user.UserService.RegisterUser:input_type -> user.RegisterUserRequest
-	3, // 1: user.UserService.GetUserProfile:input_type -> user.GetProfileRequest
-	4, // 2: user.UserService.UpdateUserProfile:input_type -> user.UpdateUserProfileRequest
-	5, // 3: user.UserService.UpdateUserPassword:input_type -> user.UpdateUserPasswordRequest
-	6, // 4: user.UserService.UpdateUserAvatar:input_type -> user.UpdateUserAvatarRequest
-	7, // 5: user.UserService.DeactivateUser:input_type -> user.DeactivateUserProfileRequest
-	8, // 6: user.UserService.ActivateUserProfile:input_type -> user.ActivateUserProfileRequest
-	1, // 7: user.UserService.RegisterUser:output_type -> user.UserProfile
-	1, // 8: user.UserService.GetUserProfile:output_type -> user.UserProfile
-	0, // 9: user.UserService.UpdateUserProfile:output_type -> user.Empty
-	0, // 10: user.UserService.UpdateUserPassword:output_type -> user.Empty
-	0, // 11: user.UserService.UpdateUserAvatar:output_type -> user.Empty
-	0, // 12: user.UserService.DeactivateUser:output_type -> user.Empty
-	0, // 13: user.UserService.ActivateUserProfile:output_type -> user.Empty
-	7, // [7:14] is the sub-list for method output_type
-	0, // [0:7] is the sub-list for method input_type
+	2, // 0: user.UserService.GetUserProfile:input_type -> user.GetProfileRequest
+	3, // 1: user.UserService.UpdateUserProfile:input_type -> user.UpdateUserProfileRequest
+	4, // 2: user.UserService.UpdateUserPassword:input_type -> user.UpdateUserPasswordRequest
+	5, // 3: user.UserService.UpdateUserAvatar:input_type -> user.UpdateUserAvatarRequest
+	6, // 4: user.UserService.DeactivateUser:input_type -> user.DeactivateUserProfileRequest
+	7, // 5: user.UserService.ActivateUserProfile:input_type -> user.ActivateUserProfileRequest
+	1, // 6: user.UserService.GetUserProfile:output_type -> user.UserProfile
+	0, // 7: user.UserService.UpdateUserProfile:output_type -> user.Empty
+	0, // 8: user.UserService.UpdateUserPassword:output_type -> user.Empty
+	0, // 9: user.UserService.UpdateUserAvatar:output_type -> user.Empty
+	0, // 10: user.UserService.DeactivateUser:output_type -> user.Empty
+	0, // 11: user.UserService.ActivateUserProfile:output_type -> user.Empty
+	6, // [6:12] is the sub-list for method output_type
+	0, // [0:6] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -695,15 +605,14 @@ func file_user_proto_init() {
 		return
 	}
 	file_user_proto_msgTypes[1].OneofWrappers = []any{}
-	file_user_proto_msgTypes[2].OneofWrappers = []any{}
-	file_user_proto_msgTypes[4].OneofWrappers = []any{}
+	file_user_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_proto_rawDesc), len(file_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
