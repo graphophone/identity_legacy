@@ -5,7 +5,6 @@ package user;
 option go_package = "graphophone.identity/internal/services/common/user";
 
 service UserService {
-    rpc RegisterUser(RegisterUserRequest) returns (UserProfile) {}
     rpc GetUserProfile(GetProfileRequest) returns (UserProfile) {}
     rpc UpdateUserProfile(UpdateUserProfileRequest) returns (Empty) {}
     rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (Empty) {}
@@ -25,14 +24,6 @@ message UserProfile {
     optional string country = 6;
     optional string city = 7;
     optional string avatar_url = 8;
-}
-
-message RegisterUserRequest {
-    string username = 1;
-    string email = 2;
-    string password = 3;
-    optional string first_name = 4;
-    optional string last_name = 5;
 }
 
 message GetProfileRequest {

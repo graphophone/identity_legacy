@@ -7,7 +7,28 @@ option go_package = "graphophone.identity/internal/services/common/auth";
 service AuthService {
     rpc SignUp(SignUpRequest) returns (Tokens) {}
     rpc Login(LoginRequest) returns (Tokens) {}
-    rpc Refresh(RefreshRequest) returns (Tokens) {}
-    rpc Logout(LogoutRequest) returns (Empty) {}
-    rpc LogoutEverywhere(LogoutRequest) returns (Empty) {}
+    rpc RefreshTokens(Tokens) returns (Tokens) {}
+    rpc VerifyTokens(Tokens) returns (Empty) {}
+    rpc Logout(Tokens) returns (Empty) {}
+    rpc LogoutEverywhere(Tokens) returns (Empty) {}
+}
+
+message Empty {}
+
+message Tokens {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message SignUpRequest {
+    string username = 1;
+    string email = 2;
+    string password = 3;
+    optional string first_name = 4;
+    optional string last_name = 5;
 }
