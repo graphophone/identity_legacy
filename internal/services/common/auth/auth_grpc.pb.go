@@ -22,7 +22,7 @@ const (
 	AuthService_SignUp_FullMethodName           = "/auth.AuthService/SignUp"
 	AuthService_Login_FullMethodName            = "/auth.AuthService/Login"
 	AuthService_RefreshTokens_FullMethodName    = "/auth.AuthService/RefreshTokens"
-	AuthService_VerifyTokens_FullMethodName     = "/auth.AuthService/VerifyTokens"
+	AuthService_ExtractClaims_FullMethodName    = "/auth.AuthService/ExtractClaims"
 	AuthService_Logout_FullMethodName           = "/auth.AuthService/Logout"
 	AuthService_LogoutEverywhere_FullMethodName = "/auth.AuthService/LogoutEverywhere"
 )
@@ -34,7 +34,7 @@ type AuthServiceClient interface {
 	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*Tokens, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Tokens, error)
 	RefreshTokens(ctx context.Context, in *Tokens, opts ...grpc.CallOption) (*Tokens, error)
-	VerifyTokens(ctx context.Context, in *Tokens, opts ...grpc.CallOption) (*Empty, error)
+	ExtractClaims(ctx context.Context, in *Tokens, opts ...grpc.CallOption) (*Claims, error)
 	Logout(ctx context.Context, in *Tokens, opts ...grpc.CallOption) (*Empty, error)
 	LogoutEverywhere(ctx context.Context, in *Tokens, opts ...grpc.CallOption) (*Empty, error)
 }
@@ -77,10 +77,10 @@ func (c *authServiceClient) RefreshTokens(ctx context.Context, in *Tokens, opts 
 	return out, nil
 }
 
-func (c *authServiceClient) VerifyTokens(ctx context.Context, in *Tokens, opts ...grpc.CallOption) (*Empty, error) {
+func (c *authServiceClient) ExtractClaims(ctx context.Context, in *Tokens, opts ...grpc.CallOption) (*Claims, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Empty)
-	err := c.cc.Invoke(ctx, AuthService_VerifyTokens_FullMethodName, in, out, cOpts...)
+	out := new(Claims)
+	err := c.cc.Invoke(ctx, AuthService_ExtractClaims_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +114,7 @@ type AuthServiceServer interface {
 	SignUp(context.Context, *SignUpRequest) (*Tokens, error)
 	Login(context.Context, *LoginRequest) (*Tokens, error)
 	RefreshTokens(context.Context, *Tokens) (*Tokens, error)
-	VerifyTokens(context.Context, *Tokens) (*Empty, error)
+	ExtractClaims(context.Context, *Tokens) (*Claims, error)
 	Logout(context.Context, *Tokens) (*Empty, error)
 	LogoutEverywhere(context.Context, *Tokens) (*Empty, error)
 	mustEmbedUnimplementedAuthServiceServer()
@@ -136,8 +136,8 @@ func (UnimplementedAuthServiceServer) Login(context.Context, *LoginRequest) (*To
 func (UnimplementedAuthServiceServer) RefreshTokens(context.Context, *Tokens) (*Tokens, error) {
 	return nil, status.Error(codes.Unimplemented, "method RefreshTokens not implemented")
 }
-func (UnimplementedAuthServiceServer) VerifyTokens(context.Context, *Tokens) (*Empty, error) {
-	return nil, status.Error(codes.Unimplemented, "method VerifyTokens not implemented")
+func (UnimplementedAuthServiceServer) ExtractClaims(context.Context, *Tokens) (*Claims, error) {
+	return nil, status.Error(codes.Unimplemented, "method ExtractClaims not implemented")
 }
 func (UnimplementedAuthServiceServer) Logout(context.Context, *Tokens) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Logout not implemented")
@@ -220,20 +220,20 @@ func _AuthService_RefreshTokens_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_VerifyTokens_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AuthService_ExtractClaims_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Tokens)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).VerifyTokens(ctx, in)
+		return srv.(AuthServiceServer).ExtractClaims(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AuthService_VerifyTokens_FullMethodName,
+		FullMethod: AuthService_ExtractClaims_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).VerifyTokens(ctx, req.(*Tokens))
+		return srv.(AuthServiceServer).ExtractClaims(ctx, req.(*Tokens))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -294,8 +294,8 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_RefreshTokens_Handler,
 		},
 		{
-			MethodName: "VerifyTokens",
-			Handler:    _AuthService_VerifyTokens_Handler,
+			MethodName: "ExtractClaims",
+			Handler:    _AuthService_ExtractClaims_Handler,
 		},
 		{
 			MethodName: "Logout",

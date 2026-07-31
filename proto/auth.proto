@@ -8,7 +8,7 @@ service AuthService {
     rpc SignUp(SignUpRequest) returns (Tokens) {}
     rpc Login(LoginRequest) returns (Tokens) {}
     rpc RefreshTokens(Tokens) returns (Tokens) {}
-    rpc VerifyTokens(Tokens) returns (Empty) {}
+    rpc ExtractClaims(Tokens) returns (Claims) {}
     rpc Logout(Tokens) returns (Empty) {}
     rpc LogoutEverywhere(Tokens) returns (Empty) {}
 }
@@ -31,4 +31,8 @@ message SignUpRequest {
     string password = 3;
     optional string first_name = 4;
     optional string last_name = 5;
+}
+
+message Claims {
+    uint32 user_id = 1;
 }

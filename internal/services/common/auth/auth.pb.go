@@ -237,6 +237,50 @@ func (x *SignUpRequest) GetLastName() string {
 	return ""
 }
 
+type Claims struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        uint32                 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Claims) Reset() {
+	*x = Claims{}
+	mi := &file_auth_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Claims) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Claims) ProtoMessage() {}
+
+func (x *Claims) ProtoReflect() protoreflect.Message {
+	mi := &file_auth_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Claims.ProtoReflect.Descriptor instead.
+func (*Claims) Descriptor() ([]byte, []int) {
+	return file_auth_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *Claims) GetUserId() uint32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
 var File_auth_proto protoreflect.FileDescriptor
 
 const file_auth_proto_rawDesc = "" +
@@ -259,12 +303,14 @@ const file_auth_proto_rawDesc = "" +
 	"\tlast_name\x18\x05 \x01(\tH\x01R\blastName\x88\x01\x01B\r\n" +
 	"\v_first_nameB\f\n" +
 	"\n" +
-	"_last_name2\x9d\x02\n" +
+	"_last_name\"!\n" +
+	"\x06Claims\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\rR\x06userId2\x9f\x02\n" +
 	"\vAuthService\x12-\n" +
 	"\x06SignUp\x12\x13.auth.SignUpRequest\x1a\f.auth.Tokens\"\x00\x12+\n" +
 	"\x05Login\x12\x12.auth.LoginRequest\x1a\f.auth.Tokens\"\x00\x12-\n" +
-	"\rRefreshTokens\x12\f.auth.Tokens\x1a\f.auth.Tokens\"\x00\x12+\n" +
-	"\fVerifyTokens\x12\f.auth.Tokens\x1a\v.auth.Empty\"\x00\x12%\n" +
+	"\rRefreshTokens\x12\f.auth.Tokens\x1a\f.auth.Tokens\"\x00\x12-\n" +
+	"\rExtractClaims\x12\f.auth.Tokens\x1a\f.auth.Claims\"\x00\x12%\n" +
 	"\x06Logout\x12\f.auth.Tokens\x1a\v.auth.Empty\"\x00\x12/\n" +
 	"\x10LogoutEverywhere\x12\f.auth.Tokens\x1a\v.auth.Empty\"\x00B4Z2graphophone.identity/internal/services/common/authb\x06proto3"
 
@@ -280,24 +326,25 @@ func file_auth_proto_rawDescGZIP() []byte {
 	return file_auth_proto_rawDescData
 }
 
-var file_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_auth_proto_goTypes = []any{
 	(*Empty)(nil),         // 0: auth.Empty
 	(*Tokens)(nil),        // 1: auth.Tokens
 	(*LoginRequest)(nil),  // 2: auth.LoginRequest
 	(*SignUpRequest)(nil), // 3: auth.SignUpRequest
+	(*Claims)(nil),        // 4: auth.Claims
 }
 var file_auth_proto_depIdxs = []int32{
 	3, // 0: auth.AuthService.SignUp:input_type -> auth.SignUpRequest
 	2, // 1: auth.AuthService.Login:input_type -> auth.LoginRequest
 	1, // 2: auth.AuthService.RefreshTokens:input_type -> auth.Tokens
-	1, // 3: auth.AuthService.VerifyTokens:input_type -> auth.Tokens
+	1, // 3: auth.AuthService.ExtractClaims:input_type -> auth.Tokens
 	1, // 4: auth.AuthService.Logout:input_type -> auth.Tokens
 	1, // 5: auth.AuthService.LogoutEverywhere:input_type -> auth.Tokens
 	1, // 6: auth.AuthService.SignUp:output_type -> auth.Tokens
 	1, // 7: auth.AuthService.Login:output_type -> auth.Tokens
 	1, // 8: auth.AuthService.RefreshTokens:output_type -> auth.Tokens
-	0, // 9: auth.AuthService.VerifyTokens:output_type -> auth.Empty
+	4, // 9: auth.AuthService.ExtractClaims:output_type -> auth.Claims
 	0, // 10: auth.AuthService.Logout:output_type -> auth.Empty
 	0, // 11: auth.AuthService.LogoutEverywhere:output_type -> auth.Empty
 	6, // [6:12] is the sub-list for method output_type
@@ -319,7 +366,7 @@ func file_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_auth_proto_rawDesc), len(file_auth_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
