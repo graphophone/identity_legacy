@@ -5,7 +5,7 @@ import (
 
 	"gorm.io/gorm"
 	"graphophone.identity/internal/core"
-	userdb "graphophone.identity/internal/database/postgres/user"
+	userdb "graphophone.identity/internal/database/postgresdb/user"
 )
 
 type UserManager interface {

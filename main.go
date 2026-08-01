@@ -9,6 +9,7 @@ import (
 	ccontext "graphophone.identity/internal/context"
 	"graphophone.identity/internal/middleware"
 	"graphophone.identity/internal/services"
+	"graphophone.identity/internal/services/common/auth"
 	"graphophone.identity/internal/services/common/user"
 )
 
@@ -42,6 +43,7 @@ func main() {
 		middleware.ContextPropagationUnaryServerInterceptor(cb),
 	))
 	user.RegisterUserServiceServer(grpcServer, services.NewUserServer())
+	auth.RegisterAuthServiceServer(grpcServer, services.NewAuthServer())
 
 	log.Print("Serving grpc on port 8080")
 	if err := grpcServer.Serve(lis); err != nil {

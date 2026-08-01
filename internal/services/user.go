@@ -50,25 +50,6 @@ func (u *UserServer) GetUserProfile(ctx context.Context, req *user.GetProfileReq
 	return mapToProfileResponse(profile), nil
 }
 
-func (u *UserServer) RegisterUser(ctx context.Context, req *user.RegisterUserRequest) (*user.UserProfile, error) {
-	um, err := ccontext.GetUserManager(ctx)
-	if err != nil {
-		return nil, err
-	}
-	regData := usercore.RegisterUserData{
-		Username:  req.Username,
-		Email:     req.Email,
-		Password:  req.Password,
-		FirstName: req.FirstName,
-		LastName:  req.LastName,
-	}
-	profile, err := um.Register(ctx, &regData)
-	if err != nil {
-		return nil, err
-	}
-	return mapToProfileResponse(profile), nil
-}
-
 func (u *UserServer) UpdateUserAvatar(ctx context.Context, req *user.UpdateUserAvatarRequest) (*user.Empty, error) {
 	um, err := ccontext.GetUserManager(ctx)
 	if err != nil {

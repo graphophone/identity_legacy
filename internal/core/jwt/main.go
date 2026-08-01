@@ -5,42 +5,34 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	_jwt "github.com/golang-jwt/jwt/v5"
 	"graphophone.identity/internal/config"
 )
 
 func GenerateJwtToken(id uint, cfg *config.JwtConfig) (string, error) {
-	claims := _jwt.RegisteredClaims{
-		ExpiresAt: _jwt.NewNumericDate(time.Now().Add(cfg.ExpirationTime)),
-		ID:        fmt.Sprintf("%d", id),
+	claims := jwt.RegisteredClaims{
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(cfg.ExpirationTime)),
+		Subject:   fmt.Sprintf("%d", id),
 	}
-	token := _jwt.NewWithClaims(
-		_jwt.SigningMethodHS256,
+	token := jwt.NewWithClaims(
+		jwt.SigningMethodHS256,
 		claims,
 	)
 	return token.SignedString([]byte(cfg.Key))
 }
 
-func IsValidJwt(tokenString string, cfg *config.JwtConfig) bool {
+func GetClaims(tokenString string, cfg *config.JwtConfig) (jwt.Claims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		return []byte(cfg.Key), nil
 	})
 	if err != nil {
-		return false
+		return nil, &InvalidJwt{}
 	}
 	expTime, err := token.Claims.GetExpirationTime()
 	if err != nil {
-		return false
+		return nil, &InvalidJwt{}
 	}
-	return !time.Now().After(expTime.Time)
-}
-
-func GetClaims(tokenString string, cfg *config.JwtConfig) (_jwt.Claims, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
-		return []byte(cfg.Key), nil
-	})
-	if err != nil {
-		return nil, err
+	if time.Now().After(expTime.Time) {
+		return nil, &ExpiredJwt{}
 	}
 	return token.Claims, nil
 }
