@@ -3,66 +3,91 @@ package refreshtoken
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/google/uuid"
-	_redis "github.com/redis/go-redis/v9"
+	"github.com/redis/go-redis/v9"
 	"graphophone.identity/internal/config"
-	"graphophone.identity/internal/database/redis"
+	"graphophone.identity/internal/database/redisdb"
 )
 
 type RefreshTokenCache interface {
 	Save(ctx context.Context, userId uint) (string, error)
 	Remove(ctx context.Context, refreshToken string) error
+	RemoveAll(ctx context.Context, userId uint) error
 	GetUserId(ctx context.Context, refreshToken string) (uint, error)
 }
 
 type refreshTokenCache struct {
 	cfg         config.RefreshTokenConfig
-	redisClient *_redis.Client
+	redisClient *redis.Client
 }
 
-func New(redisClient *_redis.Client) RefreshTokenCache {
+func New(ctx context.Context, redisClient *redis.Client) (RefreshTokenCache, error) {
+	_, err := redisClient.FTCreate(
+		ctx, "idx:refresh_tokens",
+		&redis.FTCreateOptions{
+			OnJSON: true,
+			Prefix: []any{"refresh_tokens"},
+		},
+		&redis.FieldSchema{
+			FieldName: "$.userId",
+			As:        "userId",
+			FieldType: redis.SearchFieldTypeNumeric,
+		},
+	).Result()
+	if err != nil {
+		return nil, err
+	}
 	return &refreshTokenCache{
 		redisClient: redisClient,
-	}
+	}, nil
 }
 
 func (c *refreshTokenCache) Save(ctx context.Context, userId uint) (string, error) {
 	refreshToken := uuid.NewString()
 	data := map[string]any{
-		"userId":  userId,
-		"isValid": true,
+		"userId": userId,
 	}
-	dataString, err := json.Marshal(data)
-	if err != nil {
-		return "", err
-	}
-	if err := c.redisClient.Set(ctx, refreshToken, dataString, c.cfg.ExpirationTime).Err(); err != nil {
+	key := getKey(refreshToken)
+	if err := c.redisClient.JSONSet(ctx, key, "$", data).Err(); err != nil {
 		return "", err
 	}
 	return refreshToken, nil
 }
 
 func (c *refreshTokenCache) Remove(ctx context.Context, refreshToken string) error {
-	value, err := c.redisClient.Get(ctx, refreshToken).Result()
+	key := getKey(refreshToken)
+	return c.redisClient.Expire(ctx, key, time.Second).Err()
+}
+
+func (c *refreshTokenCache) RemoveAll(ctx context.Context, userId uint) error {
+	entries, err := c.redisClient.FTSearchWithArgs(
+		ctx, "idx:refresh_tokens",
+		strconv.FormatUint(uint64(userId), 10),
+		&redis.FTSearchOptions{
+			Return: []redis.FTSearchReturn{
+				{
+					FieldName: "$.userId",
+					As:        "userId",
+				},
+			},
+		},
+	).Result()
 	if err != nil {
 		return err
 	}
-	var data map[string]any
-	if err := json.Unmarshal([]byte(value), &data); err != nil {
-		return err
+	for _, entry := range entries.Docs {
+		fmt.Println(entry.ID)
 	}
-	data["isValid"] = false
-	dataString, err := json.Marshal(data)
-	if err != nil {
-		return err
-	}
-	return c.redisClient.Set(ctx, refreshToken, dataString, c.cfg.ExpirationTime).Err()
+	return nil
 }
 
 func (c *refreshTokenCache) GetUserId(ctx context.Context, refreshToken string) (uint, error) {
-	value, err := c.redisClient.Get(ctx, refreshToken).Result()
+	key := getKey(refreshToken)
+	value, err := c.redisClient.Get(ctx, key).Result()
 	if err != nil {
 		return 0, err
 	}
@@ -70,23 +95,18 @@ func (c *refreshTokenCache) GetUserId(ctx context.Context, refreshToken string) 
 	if err := json.Unmarshal([]byte(value), &data); err != nil {
 		return 0, err
 	}
-	isValidVal, ok := data["isValid"]
-	if !ok {
-		return 0, &redis.InvalidValue{}
-	}
-	if isValid, ok := isValidVal.(bool); !ok {
-		return 0, &redis.IncorrectValueFormat{}
-	} else if !isValid {
-		return 0, &redis.InvalidValue{}
-	}
 	userIdVal, ok := data["userId"]
 	if !ok {
-		return 0, &redis.IncorrectValueFormat{}
+		return 0, &redisdb.IncorrectValueFormat{}
 	}
 	userIdStr, ok := userIdVal.(string)
 	if !ok {
-		return 0, &redis.IncorrectValueFormat{}
+		return 0, &redisdb.IncorrectValueFormat{}
 	}
 	userId, err := strconv.ParseUint(userIdStr, 10, 32)
 	return uint(userId), err
+}
+
+func getKey(refreshToken string) string {
+	return "refresh_token:" + refreshToken
 }

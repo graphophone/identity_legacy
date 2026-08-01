@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"gorm.io/gorm"
-	"graphophone.identity/internal/database/postgres"
+	"graphophone.identity/internal/database/postgresdb"
 )
 
 type UserDb interface {
@@ -18,10 +18,10 @@ type UserDb interface {
 }
 
 type userDb struct {
-	pg postgres.PgClient
+	pg postgresdb.PgClient
 }
 
-func New(pg postgres.PgClient) (UserDb, error) {
+func New(pg postgresdb.PgClient) (UserDb, error) {
 	if err := pg.RegisterModel(&User{}); err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (m *userDb) Update(ctx context.Context, user *User) error {
 		return err
 	}
 	if rows != 1 {
-		return &postgres.NotFoundErr{}
+		return &postgresdb.NotFoundErr{}
 	}
 	return nil
 }
@@ -78,7 +78,7 @@ func (m *userDb) UpdateIsActive(ctx context.Context, id uint, isActive bool) err
 		return err
 	}
 	if rows != 1 {
-		return &postgres.NotFoundErr{}
+		return &postgresdb.NotFoundErr{}
 	}
 	return nil
 }
@@ -90,7 +90,7 @@ func (m *userDb) UpdatePasswordHash(ctx context.Context, id uint, passHash strin
 		return err
 	}
 	if rows != 1 {
-		return &postgres.NotFoundErr{}
+		return &postgresdb.NotFoundErr{}
 	}
 	return nil
 }
@@ -102,7 +102,7 @@ func (m *userDb) UpdateAvatar(ctx context.Context, id uint, avatarUrl string) er
 		return err
 	}
 	if rows != 1 {
-		return &postgres.NotFoundErr{}
+		return &postgresdb.NotFoundErr{}
 	}
 	return nil
 }
