@@ -7,8 +7,8 @@ import (
 	"graphophone.identity/internal/config"
 	"graphophone.identity/internal/core"
 	jwtcore "graphophone.identity/internal/core/jwt"
-	userdb "graphophone.identity/internal/database/postgres/user"
-	refreshtoken "graphophone.identity/internal/database/redis/refresh_token"
+	userdb "graphophone.identity/internal/database/postgresdb/user"
+	refreshtoken "graphophone.identity/internal/database/redisdb/refresh_token"
 )
 
 type AuthManager interface {

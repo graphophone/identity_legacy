@@ -68,10 +68,6 @@ func (a *AuthServer) Logout(ctx context.Context, tokens *auth.Tokens) (*auth.Emp
 	return &auth.Empty{}, nil
 }
 
-func (a *AuthServer) LogoutEverywhere(ctx context.Context, tokens *auth.Tokens) (*auth.Empty, error) {
-	panic("unimplemented")
-}
-
 func (a *AuthServer) RefreshTokens(ctx context.Context, tokens *auth.Tokens) (*auth.Tokens, error) {
 	am, err := ccontext.GetAuthManager(ctx)
 	if err != nil {

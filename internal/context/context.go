@@ -6,10 +6,10 @@ import (
 	"graphophone.identity/internal/config"
 	authcore "graphophone.identity/internal/core/auth"
 	usercore "graphophone.identity/internal/core/user"
-	userdb "graphophone.identity/internal/database/postgres/user"
 	"graphophone.identity/internal/database/postgresdb"
-	refreshtoken "graphophone.identity/internal/database/redis/refresh_token"
+	userdb "graphophone.identity/internal/database/postgresdb/user"
 	"graphophone.identity/internal/database/redisdb"
+	refreshtoken "graphophone.identity/internal/database/redisdb/refresh_token"
 )
 
 type customContext struct {
@@ -36,10 +36,7 @@ func newCustomContext(cfg config.Config) (*customContext, error) {
 	if err != nil {
 		return nil, err
 	}
-	refreshTokenCache, err := refreshtoken.New(baseCtx, redisClient)
-	if err != nil {
-		return nil, err
-	}
+	refreshTokenCache := refreshtoken.New(redisClient)
 	authManager := authcore.New(userDb, refreshTokenCache, cfg)
 
 	return &customContext{

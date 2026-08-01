@@ -10,7 +10,6 @@ service AuthService {
     rpc RefreshTokens(Tokens) returns (Tokens) {}
     rpc ExtractClaims(Tokens) returns (Claims) {}
     rpc Logout(Tokens) returns (Empty) {}
-    rpc LogoutEverywhere(Tokens) returns (Empty) {}
 }
 
 message Empty {}
