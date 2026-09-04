@@ -9,7 +9,7 @@ services:
 
   redis-insight:
     image: redislabs/redisinsight:3.6.0
-    container_name: redis-insight
+    container_name: redis-insight_identity
     restart: unless-stopped
     environment:
       REDIS_HOST: redis
@@ -26,7 +26,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:9
-    container_name: pgadmin
+    container_name: pgadmin_identity
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: "pgadmin@mail.com"
@@ -48,7 +48,7 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8080:8080"
+      - "9543:8080"
 
 networks:
   redis-network:

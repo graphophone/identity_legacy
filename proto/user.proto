@@ -48,7 +48,7 @@ message UpdateUserPasswordRequest {
 
 message UpdateUserAvatarRequest {
     uint32 user_id = 1;
-    bytes image = 2;
+    optional bytes image = 2;
 }
 
 message DeactivateUserProfileRequest {

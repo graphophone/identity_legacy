@@ -1,7 +1,7 @@
 services:
   redis:
     image: redis:8.8-alpine
-    container_name: redis
+    container_name: redis_identity
     command: redis-server --requirepass my-redis-pass --loglevel warning
     restart: unless-stopped
     healthcheck:
@@ -11,7 +11,7 @@ services:
 
   postgres:
     image: postgres:18-alpine
-    container_name: postgres
+    container_name: postgres_identity
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: my-postgres-pass
